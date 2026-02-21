@@ -3,66 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LUXORA Luxury Catalogue">
     <title>LUXORA Luxury Catalogue</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <style>
+        body {
+            background-color: #1c1c1e;
+            color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: gold;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+        .product {
+            border: 1px solid gold;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+        }
+        .admin-panel {
+            background-color: #2c2c2e;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .whatsapp {
+            color: green;
+        }
+    </style>
 </head>
-<body class="dark-theme">
-    <header>
+<body>
+    <div class="container">
         <h1>LUXORA Luxury Catalogue</h1>
-        <nav>
-            <ul>
-                <li><a href="#watches">Watches</a></li>
-                <li><a href="#pens">Pens</a></li>
-                <li><a href="#wallets">Wallets</a></li>
-                <li><a href="#sunglasses">Sunglasses</a></li>
-                <li><a href="#accessories">Accessories</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section id="catalogue">
-            <!-- Product Items Will Be Generated Here -->
-        </section>
         <div class="admin-panel">
             <h2>Admin Panel</h2>
-            <input type="file" id="imageUpload" accept="image/*">
-            <input type="text" id="productName" placeholder="Product Name">
-            <input type="number" id="productPrice" placeholder="Price" style="display:none;">
-            <button id="addProduct">Add Product</button>
-            <div id="productManagement">
-                <!-- Product Management Logic -->
-            </div>
+            <input type="password" placeholder="Password" id="admin-password">
+            <button onclick="checkPassword()">Login</button>
         </div>
-    </main>
-    <footer>
-        <p>Contact us via <a href="https://wa.me/yourwhatsapplink">WhatsApp</a></p>
-    </footer>
+        <div class="products">
+            <div class="product">
+                <h3>Product Name</h3>
+                <p>Product Description</p>
+                <p>Price: $XXX</p>
+                <input type="file" accept="image/*" onchange="uploadImage(event)">
+            </div>
+            <!-- More products can be added similarly -->
+        </div>
+        <div class="whatsapp">
+            <a href="https://wa.me/your-phone-number">Chat with us on WhatsApp</a>
+        </div>
+    </div>
     <script>
-        // JavaScript code for localStorage, product management, and category filtering
-        const products = JSON.parse(localStorage.getItem('products')) || [];
-        function addProduct() {
-            const name = document.getElementById('productName').value;
-            const price = parseFloat(document.getElementById('productPrice').value);
-            const image = document.getElementById('imageUpload').files[0];
-            if(name && price && image) {
-                const product = { name, price, image, category: 'default' }; // Assign default category for simplicity
-                products.push(product);
-                localStorage.setItem('products', JSON.stringify(products));
-                renderProducts();
+        function checkPassword() {
+            const password = document.getElementById('admin-password').value;
+            if (password === 'luxora2024') {
+                alert('Login successful!');
+                // Here you can redirect to admin panel
+            } else {
+                alert('Incorrect password!');
             }
         }
-        function renderProducts() {
-            const catalogue = document.getElementById('catalogue');
-            catalogue.innerHTML = '';
-            products.forEach(product => {
-                const item = document.createElement('div');
-                item.innerHTML = `<h3>${product.name}</h3><img src='${URL.createObjectURL(product.image)}' alt='${product.name}' /><p>Price: ${(product.price).toFixed(2)}</p>`;
-                catalogue.appendChild(item);
-            });
+        function uploadImage(event) {
+            const file = event.target.files[0];
+            console.log('Image uploaded:', file);
+            // Handle image upload logic here
         }
-        document.getElementById('addProduct').addEventListener('click', addProduct);
-        renderProducts();
     </script>
 </body>
 </html>
