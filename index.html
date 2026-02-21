@@ -3,65 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>LUXORA Luxury Catalogue</title>
-    <style>
-        body { background-color: #0c0c0c; color: #ffffff; font-family: Arial, sans-serif; }
-        .gold-accent { color: gold; }
-        header, footer { text-align: center; padding: 20px; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
-<body>
+<body class="dark-theme">
     <header>
-        <h1 class="gold-accent">LUXORA Luxury Catalogue</h1>
+        <h1>LUXORA Luxury Catalogue</h1>
+        <nav>
+            <ul>
+                <li><a href="#watches">Watches</a></li>
+                <li><a href="#pens">Pens</a></li>
+                <li><a href="#wallets">Wallets</a></li>
+                <li><a href="#sunglasses">Sunglasses</a></li>
+                <li><a href="#accessories">Accessories</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
-        <section id="products">
-            <!-- Product items will be populated here -->
+        <section id="catalogue">
+            <!-- Product Items Will Be Generated Here -->
         </section>
+        <div class="admin-panel">
+            <h2>Admin Panel</h2>
+            <input type="file" id="imageUpload" accept="image/*">
+            <input type="text" id="productName" placeholder="Product Name">
+            <input type="number" id="productPrice" placeholder="Price" style="display:none;">
+            <button id="addProduct">Add Product</button>
+            <div id="productManagement">
+                <!-- Product Management Logic -->
+            </div>
+        </div>
     </main>
     <footer>
-        <p>Contact us via <a href="https://wa.me/1234567890">WhatsApp</a></p>
+        <p>Contact us via <a href="https://wa.me/yourwhatsapplink">WhatsApp</a></p>
     </footer>
     <script>
-        const products = [];
-
-        function loadProducts() {
-            // Load product data
-            // Example:
-            const product = {
-                name: 'Luxury Item',
-                price: 100,
-                image: 'image.jpg'
-            };
-            products.push(product);
-            displayProducts();
-        }
-
-        function displayProducts() {
-            const productsSection = document.getElementById('products');
-            productsSection.innerHTML = '';
-            products.forEach((product) => {
-                const productDiv = document.createElement('div');
-                productDiv.innerHTML = `<h2>${product.name}</h2><p>${product.price}</p><img src="${product.image}" alt="${product.name}" />`;
-                productsSection.appendChild(productDiv);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', loadProducts);
-
-        // Admin Panel Functionality
-        const adminPassword = 'luxora2024';
-        function checkAdminPassword() {
-            const inputPassword = prompt('Enter admin password:');
-            if (inputPassword === adminPassword) {
-                alert('Access granted to admin panel.');
-                // Admin panel code goes here
-            } else {
-                alert('Access denied.');
+        // JavaScript code for localStorage, product management, and category filtering
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        function addProduct() {
+            const name = document.getElementById('productName').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const image = document.getElementById('imageUpload').files[0];
+            if(name && price && image) {
+                const product = { name, price, image, category: 'default' }; // Assign default category for simplicity
+                products.push(product);
+                localStorage.setItem('products', JSON.stringify(products));
+                renderProducts();
             }
         }
-        checkAdminPassword();
+        function renderProducts() {
+            const catalogue = document.getElementById('catalogue');
+            catalogue.innerHTML = '';
+            products.forEach(product => {
+                const item = document.createElement('div');
+                item.innerHTML = `<h3>${product.name}</h3><img src='${URL.createObjectURL(product.image)}' alt='${product.name}' /><p>Price: ${(product.price).toFixed(2)}</p>`;
+                catalogue.appendChild(item);
+            });
+        }
+        document.getElementById('addProduct').addEventListener('click', addProduct);
+        renderProducts();
     </script>
 </body>
 </html>
