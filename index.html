@@ -3,105 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>LUXORA Luxury Catalogue</title>
     <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            color: gold;
-        }
-        .admin-panel {
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        .category {
-            cursor: pointer;
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid gold;
-            transition: 0.3s;
-        }
-        .category:hover {
-            background: gold;
-            color: #121212;
-        }
+        body { background-color: #0c0c0c; color: #ffffff; font-family: Arial, sans-serif; }
+        .gold-accent { color: gold; }
+        header, footer { text-align: center; padding: 20px; }
     </style>
 </head>
 <body>
     <header>
-        <h1>LUXORA Luxury Catalogue</h1>
-        <div class="admin-panel">
-            <h2>Admin Panel</h2>
-            <input type="password" id="admin-password" placeholder="Enter password"/>
-            <button onclick="login()">Login</button>
-        </div>
+        <h1 class="gold-accent">LUXORA Luxury Catalogue</h1>
     </header>
-
     <main>
-        <section id="product-management">
-            <h2>Product Management</h2>
-            <div>
-                <input type="file" id="image-upload" />
-                <input type="text" id="product-name" placeholder="Product Name" />
-                <button onclick="addProduct()">Add Product</button>
-            </div>
-
-            <h3>Categories</h3>
-            <div id="categories">
-                <div class="category" onclick="browseCategory('Category1')">Category 1</div>
-                <div class="category" onclick="browseCategory('Category2')">Category 2</div>
-                <div class="category" onclick="browseCategory('Category3')">Category 3</div>
-            </div>
+        <section id="products">
+            <!-- Product items will be populated here -->
         </section>
     </main>
-
     <footer>
-        <p>WhatsApp Integration Link: <a href="https://wa.me/1234567890">Chat with us</a></p>
+        <p>Contact us via <a href="https://wa.me/1234567890">WhatsApp</a></p>
     </footer>
-
     <script>
-        const products = JSON.parse(localStorage.getItem('products')) || [];
+        const products = [];
+
+        function loadProducts() {
+            // Load product data
+            // Example:
+            const product = {
+                name: 'Luxury Item',
+                price: 100,
+                image: 'image.jpg'
+            };
+            products.push(product);
+            displayProducts();
+        }
+
+        function displayProducts() {
+            const productsSection = document.getElementById('products');
+            productsSection.innerHTML = '';
+            products.forEach((product) => {
+                const productDiv = document.createElement('div');
+                productDiv.innerHTML = `<h2>${product.name}</h2><p>${product.price}</p><img src="${product.image}" alt="${product.name}" />`;
+                productsSection.appendChild(productDiv);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProducts);
+
+        // Admin Panel Functionality
         const adminPassword = 'luxora2024';
-
-        function login() {
-            const password = document.getElementById('admin-password').value;
-            if (password === adminPassword) {
-                alert('Login Successful!');
-                // proceed to show admin functionalities
+        function checkAdminPassword() {
+            const inputPassword = prompt('Enter admin password:');
+            if (inputPassword === adminPassword) {
+                alert('Access granted to admin panel.');
+                // Admin panel code goes here
             } else {
-                alert('Incorrect Password!');
+                alert('Access denied.');
             }
         }
-
-        function addProduct() {
-            const imageFile = document.getElementById('image-upload').files[0];
-            const productName = document.getElementById('product-name').value;
-            if (imageFile && productName) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const product = {
-                        name: productName,
-                        image: e.target.result
-                    };
-                    products.push(product);
-                    localStorage.setItem('products', JSON.stringify(products));
-                    alert('Product added successfully!');
-                    // Refresh the product list or UI
-                };
-                reader.readAsDataURL(imageFile);
-            } else {
-                alert('Please provide both an image and a product name.');
-            }
-        }
-
-        function browseCategory(category) {
-            alert('Browsing ' + category);
-            // Logic to display products of the selected category
-        }
+        checkAdminPassword();
     </script>
 </body>
 </html>
